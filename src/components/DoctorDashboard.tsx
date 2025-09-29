@@ -118,12 +118,13 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               <div className="text-right">
                 <p className="text-sm font-medium">Dr. Rajeev Nair</p>
                 <p className="text-xs text-white/80">Primary Health Center, Kochi</p>
+                <p className="text-xs text-white/60">Clinic ID: KRL-MED-001</p>
               </div>
               <Button
                 variant="secondary"
                 size="sm"
                 onClick={onLogout}
-                className="bg-white/10 hover:bg-white/20 border-white/20"
+                className="bg-white/15 hover:bg-white/25 border-white/30 text-white"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout

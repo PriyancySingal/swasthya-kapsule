@@ -16,7 +16,8 @@ import {
   Plus,
   Save,
   Shield,
-  Clock
+  Clock,
+  LogOut
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -49,6 +50,7 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [otpInput, setOtpInput] = useState("");
   const [isVerifying, setIsVerifying] = useState(!otpVerified);
+  const [medicalHistory, setMedicalHistory] = useState(patient.medicalHistory);
   const [newEntry, setNewEntry] = useState({
     diagnosis: "",
     treatment: "",
@@ -70,7 +72,18 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
       return;
     }
     
-    // Simulate saving
+    // Create new medical history entry
+    const newHistoryEntry = {
+      date: new Date().toISOString().split('T')[0], // Today's date
+      diagnosis: newEntry.diagnosis,
+      treatment: newEntry.treatment || "No specific treatment prescribed",
+      doctor: "Dr. Rajeev Nair", // Current logged in doctor
+      clinic: "Primary Health Center, Kochi"
+    };
+    
+    // Add to beginning of medical history (most recent first)
+    setMedicalHistory([newHistoryEntry, ...medicalHistory]);
+    
     toast.success("Medical record updated successfully");
     setShowNewEntry(false);
     setNewEntry({ diagnosis: "", treatment: "", notes: "" });
@@ -178,7 +191,7 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
               Back to Dashboard
             </Button>
             
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <User className="h-6 w-6" />
               <div>
                 <h1 className="text-lg font-semibold">Patient Record</h1>
@@ -186,9 +199,16 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
               </div>
             </div>
             
-            <Button variant="outline" onClick={onLogout} className="border-white/20 text-white hover:bg-white/10">
-              Logout
-            </Button>
+            <div className="flex items-center space-x-4">
+              <div className="text-right">
+                <p className="text-sm font-medium">Dr. Rajeev Nair</p>
+                <p className="text-xs text-white/80">Primary Health Center, Kochi</p>
+              </div>
+              <Button variant="outline" onClick={onLogout} className="border-white/30 text-white hover:bg-white/20">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -331,7 +351,7 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
 
             {/* Medical History Timeline */}
             <div className="space-y-4">
-              {patient.medicalHistory.map((entry, index) => (
+              {medicalHistory.map((entry, index) => (
                 <Card key={index} className="shadow-card hover:shadow-medical transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -357,7 +377,7 @@ export const PatientRecord = ({ patient, otpVerified, onBack, onLogout }: Patien
                       </div>
                       
                       <Badge variant="outline" className="text-xs">
-                        {index === 0 ? 'Latest' : `${index + 1} visits ago`}
+                        {index === 0 ? 'Latest' : entry.date === new Date().toISOString().split('T')[0] ? 'Today' : `${index + 1} visits ago`}
                       </Badge>
                     </div>
 

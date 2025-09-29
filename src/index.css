@@ -21,11 +21,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    /* Medical blue primary - trustworthy and professional */
-    --primary: 210 100% 45%;
+    /* Medical blue primary - darker and more professional */
+    --primary: 210 100% 35%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 210 85% 55%;
-    --primary-dark: 210 100% 35%;
+    --primary-light: 210 85% 45%;
+    --primary-dark: 210 100% 25%;
 
     /* Soft medical grays */
     --secondary: 215 20% 96%;
@@ -58,9 +58,9 @@ All colors MUST be HSL.
     --warning-foreground: 0 0% 100%;
     --warning-light: 38 100% 95%;
 
-    /* Professional gradients */
-    --gradient-medical: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
-    --gradient-header: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary-dark)));
+    /* Professional gradients - darker medical blues */
+    --gradient-medical: linear-gradient(135deg, hsl(var(--primary-dark)), hsl(var(--primary)));
+    --gradient-header: linear-gradient(90deg, hsl(var(--primary-dark)), hsl(210 100% 20%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(215 20% 98%));
 
     /* Medical shadows */

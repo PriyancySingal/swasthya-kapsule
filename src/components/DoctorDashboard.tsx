@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { QrCode, Search, LogOut, User, Calendar, Clock } from "lucide-react";
 import { QRScanner } from "./QRScanner";
 import { PatientRecord } from "./PatientRecord";
+import { ManualSearch } from "./ManualSearch";
 
 interface DoctorDashboardProps {
   onLogout: () => void;
@@ -60,6 +61,7 @@ const samplePatients: Record<string, Patient> = {
 
 export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [showScanner, setShowScanner] = useState(false);
+  const [showManualSearch, setShowManualSearch] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [otpVerified, setOtpVerified] = useState(false);
 
@@ -68,6 +70,18 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     if (patient) {
       setSelectedPatient(patient);
       setShowScanner(false);
+      setShowManualSearch(false);
+      // In real implementation, OTP would be sent to patient's phone
+      setTimeout(() => setOtpVerified(true), 2000);
+    }
+  };
+
+  const handleManualPatientFound = (patientId: string) => {
+    const patient = samplePatients[patientId];
+    if (patient) {
+      setSelectedPatient(patient);
+      setShowScanner(false);
+      setShowManualSearch(false);
       // In real implementation, OTP would be sent to patient's phone
       setTimeout(() => setOtpVerified(true), 2000);
     }
@@ -76,6 +90,8 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const handleBackToDashboard = () => {
     setSelectedPatient(null);
     setOtpVerified(false);
+    setShowScanner(false);
+    setShowManualSearch(false);
   };
 
   if (selectedPatient) {
@@ -85,6 +101,14 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         otpVerified={otpVerified}
         onBack={handleBackToDashboard}
         onLogout={onLogout}
+      />
+    );
+  }
+
+    return (
+      <ManualSearch
+        onPatientFound={handleManualPatientFound}
+        onCancel={() => setShowManualSearch(false)}
       />
     );
   }
@@ -235,21 +259,20 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             <CardContent className="space-y-4">
               <div className="bg-muted/50 p-4 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">Feature Status</span>
-                  <Badge variant="secondary">Coming Soon</Badge>
+                  <span className="text-sm font-medium">Manual Search</span>
+                  <Badge variant="default" className="bg-success">Available</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Manual search functionality will be available in the next update
+                  Search patients by name, ID, or phone number when QR scanning is not available
                 </p>
               </div>
               
               <Button
-                variant="outline"
-                className="w-full h-12"
-                disabled
+                onClick={() => setShowManualSearch(true)}
+                className="w-full h-12 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary"
               >
                 <Search className="h-5 w-5 mr-2" />
-                Search by Patient ID
+                Search by Patient Details
               </Button>
             </CardContent>
           </Card>

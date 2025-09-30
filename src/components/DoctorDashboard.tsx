@@ -105,6 +105,7 @@ export const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
   }
 
+  if (showManualSearch) {
     return (
       <ManualSearch
         onPatientFound={handleManualPatientFound}
